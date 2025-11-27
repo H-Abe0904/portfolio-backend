@@ -4,6 +4,7 @@ import {
     MinLength,
     MaxLength,
     IsOptional,
+    min,
 } from 'class-validator';
 
 export class SignUpDTO {
@@ -25,6 +26,7 @@ export class SignUpDTO {
 
     @IsNotEmpty()
     @IsString()
+    @MinLength(8)
     @MaxLength(40)
     password: string;
 }
