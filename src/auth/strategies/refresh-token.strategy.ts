@@ -3,6 +3,11 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 import { ConfigService } from "@nestjs/config";
 import { Request } from "express";
+import { JwtPayload, RefreshJwtPayload } from "../types";
+
+/**
+ * リフレッシュトークン作成用のStrategy
+ */
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh-token') {
@@ -13,17 +18,16 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh-to
         });
     }
 
-    async validate(req: Request, payload: JwtPayload): RefreshJwtPayload {
-        const refresToken = req
+    async validate(req: Request, payload: JwtPayload): Promise<RefreshJwtPayload> {
+        const refreshToken = req
             ?.get('authorization')
             ?.replace('Bearer ', '')
             .trim();
 
-        if (!refresToken) throw new ForbiddenException('Refresh token not found');
-
+        if (!refreshToken) throw new ForbiddenException('Refresh token not found');
         return {
             ...payload,
-            refreshToken: refresToken,
+            refreshToken,
         }
     }
 }
