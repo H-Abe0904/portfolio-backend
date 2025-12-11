@@ -7,19 +7,19 @@ import fi from 'zod/v4/locales/fi.js';
 export const createUserSchema = {
     firstName: z.string().max(16),
     lastName: z.string().max(16),
-    userId: z.string().max(16),
+    username: z.string().max(16),
     password: z.string().min(8).max(32)
 };
 
 export const signInUserSchema = {
-    userId: z.string().max(16),
+    username: z.string().max(16),
     password: z.string().min(8).max(32)
 };
 
 export const updateUserSchema = {
     firstName: z.string().max(16).optional(),
     lastName: z.string().max(16).optional(),
-    userId: z.string().max(16).optional(),
+    username: z.string().max(16).optional(),
     password: z.string().min(8).max(32).optional()
 };
 

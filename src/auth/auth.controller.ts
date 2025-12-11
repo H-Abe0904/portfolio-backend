@@ -14,12 +14,12 @@ import {
     ArgumentMetadata,
     BadRequestException
 } from '@nestjs/common';
-import { ZodObject } from 'zod';
+import z, { ZodObject } from 'zod';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { RefreshTokenGuard } from './guards';
-import { createUserSchema, CreateUserSchema, signInUserSchema, } from './schema';
+import * as schema from './schema';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { userInfo } from 'os';
 import { User } from './models/user.entity';
@@ -36,11 +36,17 @@ export class AuthController {
     @ApiOperation({ summary: 'user register' })
     @Post('signup')
     @HttpCode(HttpStatus.ACCEPTED)
-    async signUp(@Body(new ZodValidationPipe(createUserSchema)) user: CreateUserSchema)
-    const createUser = await this.authService.createUser(createUserSchema)
 
+    async signUp(@Body(new ZodValidationPipe((schema.createUserSchema))
+) user: schema.CreateUserSchema) {
 
-}
-    return {
-        messahe:
+        const createUser = await this.authService.createUser(user)
+        return {
+            message: `User created: ${createUser.username}`
+        }
     };
+}
+
+
+
+
