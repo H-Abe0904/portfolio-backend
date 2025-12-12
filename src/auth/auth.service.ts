@@ -18,6 +18,7 @@ import { ZodAny } from 'zod';
 
 @Injectable()
 export class AuthService {
+    userRepository: any;
     async createUser(createUserDto: any): Promise<void> {
         // ユーザ作成ロジックをここに実装
         const schema = createUserDto.object(createUserSchema);
