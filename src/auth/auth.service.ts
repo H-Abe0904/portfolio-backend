@@ -1,37 +1,53 @@
-import { 
+import {
     Injectable,
     HttpException,
     HttpStatus,
     ForbiddenException,
-    Logger
- } from '@nestjs/common';
- import { ConfigService } from '@nestjs/config';
-import { Repository } from 'typeorm';
-import {JwtService} from '@nestjs/jwt';
+    Logger,
+    Body
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Repository, DeepPartial } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { InjectRepository } from '@nestjs/typeorm';
-import  { createUserSchema } from '../auth/schema';
-import  {JwtPayload, Token } from '../auth/types';
-import { ZodAny } from 'zod';
+import * as schema from '../auth/schema';
+import { JwtPayload, Token } from '../auth/types';
+import { User } from './models/user.entity';
+import de from 'zod/v4/locales/de.js';
 
+type CreateUserDto = {
+    username: string;
+    password: string;
+    firstName: string;
+    lastName: string;
 
+}
 
 @Injectable()
 export class AuthService {
-    userRepository: any;
-    async createUser(createUserDto: any): Promise<void> {
+    constructor(
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+        private readonly createUserSchema: schema.CreateUserSchema,
+        private readonly configService: ConfigService,
+        private readonly jwtService: JwtService,
+    ) { }
+
+    async createUser(dto: CreateUserDto) {
         // ユーザ作成ロジックをここに実装
-        const schema = createUserDto.object(createUserSchema);
-        const validatedData = schema.parse(createUserDto);
-        const { username, password, firstName, lastName } = validatedData;
-        const hashedPassword = await argon2.hash(password);
+        const hashedPassword = await argon2.hash(dto.password);
+        dto.password = hashedPassword;
+
         // ユーザをデータベースに保存する処理を追加
-        const user = this.userRepository.create({
-            username,
-            password: hashedPassword,
-            firstName,
-            lastName,
-        });
-        await this.userRepository.save(user);
+        const newUser = this.userRepository.create(dto);
+        const savedUser = await this.userRepository.save(newUser);
+        delete savedUser?.password;
+        
+    }
+
+    async signIn(signInDto: any): Promise<Token> {
+        // Sign-in logic not implemented yet
+        throw new HttpException('Not implemented', HttpStatus.NOT_IMPLEMENTED);
     }
 }

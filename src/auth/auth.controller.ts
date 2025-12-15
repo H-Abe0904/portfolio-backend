@@ -38,9 +38,9 @@ export class AuthController {
     @HttpCode(HttpStatus.ACCEPTED)
 
     async signUp(@Body(new ZodValidationPipe(z.object(schema.createUserSchema)))
- user: schema.CreateUserSchema) {
+    signUpDto: schema.CreateUserSchema) {
 
-        await this.authService.createUser(user)
+        await this.authService.createUser(signUpDto)
         return {
             message: `User created: ${schema.createUserSchema.username}`
         }
