@@ -27,7 +27,7 @@ export const deleteUserSchema = {
     password: z.string().min(8).max(32)
 };
 
-export type CreateUserSchema = z.infer<typeof createUserSchema>;
-export type SignInUserSchema = z.infer<typeof signInUserSchema>;
-export type UpdateUserSchema = z.infer<typeof updateUserSchema>;
-export type DeleteUserSchema = z.infer<typeof deleteUserSchema>;
+export type CreateUserDto = z.infer<typeof createUserSchema>;
+export type SignInUserDto = z.infer<typeof signInUserSchema>;
+export type UpdateUserDto= z.infer<typeof updateUserSchema>;
+export type DeleteUserDto = z.infer<typeof deleteUserSchema>;
