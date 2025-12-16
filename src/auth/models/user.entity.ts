@@ -6,7 +6,7 @@ export class User {
     @PrimaryGeneratedColumn()
     username: string;
     @Column()
-    password: string;
+    password?: string;
     @Column()
     refreshToken: string;
 }

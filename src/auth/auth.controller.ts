@@ -23,6 +23,8 @@ import * as schema from './schema';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { userInfo } from 'os';
 import { User } from './models/user.entity';
+import * as schema_1 from './schema';
+import { CreateUserDto } from './schema';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -37,8 +39,8 @@ export class AuthController {
     @Post('signup')
     @HttpCode(HttpStatus.ACCEPTED)
 
-    async signUp(@Body(new ZodValidationPipe(z.object(schema.createUserSchema)))
-    signUpDto: schema.CreateUserSchema) {
+    async signUp(@Body() signUpDto: schema.CreateUserDto)
+   {
 
         await this.authService.createUser(signUpDto)
         return {

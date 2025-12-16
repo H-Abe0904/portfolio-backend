@@ -38,12 +38,13 @@ export class AuthService {
         // ユーザ作成ロジックをここに実装
         const hashedPassword = await argon2.hash(dto.password);
         dto.password = hashedPassword;
-
+        const newUser = await this.userRepository.create(dto);
         // ユーザをデータベースに保存する処理を追加
-        const newUser = this.userRepository.create(dto);
+
         const savedUser = await this.userRepository.save(newUser);
-        delete savedUser?.password;
-        
+        delete savedUser.password;
+        return savedUser;
+
     }
 
     async signIn(signInDto: any): Promise<Token> {
