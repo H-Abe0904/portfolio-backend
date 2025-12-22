@@ -16,6 +16,11 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'access-toke
         });
     }
 
+    /**
+     * バリデーションチェック
+     * @param payload ペイロード
+     * @returns ユーザー情報
+     */
     async validate(payload: any) {
         return { username: payload.username, password: payload.password };
     }

@@ -29,7 +29,7 @@ export class AuthService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        private readonly createUserSchema: schema.CreateUserSchema,
+        private readonly createUserSchema: CreateUserDto,
         private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
     ) { }

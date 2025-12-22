@@ -18,6 +18,11 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refresh-to
         });
     }
 
+    /**
+     * バリデーションチェック
+     * @param payload ペイロード
+     * @returns ユーザー情報
+     */
     async validate(req: Request, payload: JwtPayload): Promise<RefreshJwtPayload> {
         const refreshToken = req
             ?.get('authorization')
