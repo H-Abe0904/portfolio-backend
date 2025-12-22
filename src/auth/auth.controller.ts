@@ -12,7 +12,8 @@ import {
     HttpStatus,
     PipeTransform,
     ArgumentMetadata,
-    BadRequestException
+    BadRequestException,
+    UsePipes
 } from '@nestjs/common';
 import z, { ZodObject } from 'zod';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -23,8 +24,7 @@ import * as schema from './schema';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { userInfo } from 'os';
 import { User } from './models/user.entity';
-import * as schema_1 from './schema';
-import { CreateUserDto } from './schema';
+import { CreateUserDto, createUserSchema } from './schema/user.schema';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -37,12 +37,11 @@ export class AuthController {
     @ApiTags('Auth')
     @ApiOperation({ summary: 'user register' })
     @Post('signup')
-    @HttpCode(HttpStatus.ACCEPTED)
-
-    async signUp(@Body() signUpDto: schema.CreateUserDto)
+    @HttpCode(HttpStatus.CREATED)
+    async signUp(@Body(new ZodValidationPipe(z.object(schema.createUserSchema))) signUpDto: CreateUserDto): Promise<{ message: string }>
    {
 
-        await this.authService.createUser(signUpDto)
+        await this.authService.createUser(signUpDto);
         return {
             message: `User created: ${schema.createUserSchema.username}`
         }
