@@ -4,28 +4,28 @@ import fi from 'zod/v4/locales/fi.js';
 /**
  * User Schemas
  */
-export const createUserSchema = {
+export const createUserSchema = z.object({
     firstName: z.string().max(16),
     lastName: z.string().max(16),
     username: z.string().max(16),
     password: z.string().min(8).max(32)
-};
+});
 
-export const signInUserSchema = {
+export const signInUserSchema = z.object({
     username: z.string().max(16),
     password: z.string().min(8).max(32)
-};
+});
 
-export const updateUserSchema = {
+export const updateUserSchema = z.object({
     firstName: z.string().max(16).optional(),
     lastName: z.string().max(16).optional(),
     username: z.string().max(16).optional(),
     password: z.string().min(8).max(32).optional()
-};
+});
 
-export const deleteUserSchema = {
+export const deleteUserSchema = z.object({
     password: z.string().min(8).max(32)
-};
+});
 
 export type CreateUserDto = z.infer<typeof createUserSchema>;
 export type SignInUserDto = z.infer<typeof signInUserSchema>;
